@@ -4,30 +4,27 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+//
+const util = require("util")
+
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-
+//
+const outputDir = path.resolve(__dirname, "output")
+const writeFileAsync = util.promisify(fs.writeFile)
+//
 
 
 const questions = [
 
+
     {
         type: "input",
-        message: "👤 What is the Employee Title :",
-        name: "employee",
-        choices: [
-            "Manager",
-            "Engineer",
-            "Intern"
-        ]
-    },
-    {
-        type: "input",
-        message: "What is Manger Name:",
-        name: "managerName"
+        message: "👤 What is Manger Name:",
+        name: "name"
     },
 
     {
@@ -39,7 +36,7 @@ const questions = [
     {
         type: "input",
         message: "Manager EmailAddress",
-        name: "emailAddress"
+        name: "email"
     },
 
 
@@ -54,13 +51,25 @@ const questions = [
 class App {
 
     askQuestions() {
-        return inquirer.prompt(questions).then(val => {
-            let manager = new Manager(val.employee, val.managerName, val.id, val.emailAddress)
-            console.log(`\n ${manager} \n`)
+        return inquirer.prompt(questions).then( val => {
+            let manager = new Manager(val.name, val.id, val.email, val.officeNumber)
+            console.log(`line 50 app.js ${val.name}, ${val.id}, ${val.email}, ${val.officeNumber}`)
+            console.log(`\n output path ${manager} \n`)
             render(manager);
         })
     }
 }
+
+//  async function khoya(manager){
+//     if (!fs.existsSync(outputDir)) {
+//         console.log(`Making Directory`)
+//         fs.mkdirSync(outputDir);
+//         await writeFileAsync("./output/team.html", render(manager))
+//     } else {
+//          await writeFileAsync("./output/team.html", render(manager))
+
+//     }
+// }
 
 let test = new App()
 test.askQuestions();
