@@ -148,7 +148,7 @@ function renderHtml() {
         writeFileAsync(outputPath, outputData)
     }
     else {
-        fs.writeFileSync(outputPath, outputData);
+        writeFileAsync(outputPath, outputData);
     }
 }
 
