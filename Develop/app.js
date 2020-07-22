@@ -153,6 +153,7 @@ function renderHtml() {
 }
 
 init()
+//Inititalzing program to start
 function init() {
     askManagerQuestions();
 }
