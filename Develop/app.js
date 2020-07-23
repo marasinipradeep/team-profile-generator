@@ -15,36 +15,66 @@ const writeFileAsync = util.promisify(fs.writeFile)
 //Assiging empty array to push types of employees
 const employees = []
 
+// General questions
+const askGeneralQuestions = [
+    {
+        type: "input",
+        message: "👤 What is Team Name:",
+        name: "name"
+    },
+
+    {
+        type: "input",
+        message: "What is Team  Id",
+        name: "id"
+    },
+
+    {
+        type: "input",
+        message: "What is Team EmailAddress",
+        name: "email"
+    }
+]
+
+//Questions specific to manager
+const askManagerQuestion = {
+    type: "input",
+    message: "What is Manager officeNumber",
+    name: "officeNumber"
+}
+
+//Questions specific to engineer
+const askEngineerQuestions = 
+    {
+        type: "input",
+        message: "👤 What is Engineer Github address:",
+        name: "gitHub"
+    }
+
+//Questions specific to intern
+const askInternQuestions = 
+    {
+        type: "input",
+        message: "👤 What is Intern School:",
+        name: "school"
+    }
+
+
 // Code using inquirer to gather information about the Manager,and creating objects for manager
 const askManagerQuestions = () => {
-    return inquirer.prompt([
-        {
-            type: "input",
-            message: "👤 What is Manager Name:",
-            name: "name"
-        },
 
-        {
-            type: "input",
-            message: "What is Manager  Id",
-            name: "id"
-        },
-
-        {
-            type: "input",
-            message: "What is Manager EmailAddress",
-            name: "email"
-        },
-        {
-            type: "input",
-            message: "What is Manager officeNumber",
-            name: "officeNumber"
-        }
-    ]).then(managerOutput => {
-        employees.push(new Manager(managerOutput.name, managerOutput.id, managerOutput.email, managerOutput.officeNumber))
-        addEmployee();
-    })
+    //Array spread method and again putting back into single array
+   return inquirer.prompt([...askGeneralQuestions, askManagerQuestion])
+        .then(managerOutput => {
+            
+            //Object destructred 
+            const {name,id,email,officeNumber}=managerOutput
+            employees.push(new Manager(name, id, email, officeNumber))
+            addEmployee();
+        })
 }
+
+
 
 //Ask whether employee type is Engineer or Intern or want to exit
 const addEmployee = () => {
@@ -77,67 +107,28 @@ const addEmployee = () => {
 
 // Code using inquirer to gather information about the Engineer,and creating objects for Engineer
 const engineerQuestions = () => {
-    return inquirer.prompt([
-
-        {
-            type: "input",
-            message: "👤 What is Engineer Name:",
-            name: "name"
-        },
-
-        {
-            type: "input",
-            message: "What is Engineer  Id",
-            name: "id"
-        },
-
-        {
-            type: "input",
-            message: "What is Engineer EmailAddress",
-            name: "email"
-        },
-        {
-            type: "input",
-            message: "👤 What is Engineer Github address:",
-            name: "gitHub"
-        },
-    ]).then(engineerAnswer => {
-        employees.push(new Engineer(engineerAnswer.name, engineerAnswer.id, engineerAnswer.email, engineerAnswer.gitHub))
-        addEmployee();
-    })
+    //Array spread method and again putting back into single array
+   return  inquirer.prompt([...askGeneralQuestions, askEngineerQuestions])
+        .then(engineerOutput=> {
+            //Object destructure
+            const {name,id,email,gitHub}=engineerOutput
+            employees.push(new Engineer(name,id,email,gitHub))
+            addEmployee();
+        })
 }
 
 
 // Code using inquirer to gather information about the Intern,and creating objects for Intern
 const internQuestions = () => {
-    return inquirer.prompt([
+    //Array spread method and again putting back into single array
+    return inquirer.prompt([...askGeneralQuestions, askInternQuestions])
+        .then(internOutput => {
 
-        {
-            type: "input",
-            message: "👤 What is Intern Name:",
-            name: "name"
-        },
-
-        {
-            type: "input",
-            message: "What is Inter  Id",
-            name: "id"
-        },
-
-        {
-            type: "input",
-            message: "What is Inter  EmailAddress",
-            name: "email"
-        },
-        {
-            type: "input",
-            message: "👤 What is Intern School:",
-            name: "school"
-        },
-    ]).then(internAnswer => {
-        employees.push(new Intern(internAnswer.name, internAnswer.id, internAnswer.email, internAnswer.school))
-        addEmployee();
-    })
+               //Object destructred 
+            const {name,id,email,school}=internOutput
+            employees.push(new Intern(name, id, email, school))
+            addEmployee();
+        })
 }
 
 // check if the `output` folder exists and create it if it does not.
